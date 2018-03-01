@@ -1,8 +1,8 @@
 html {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 *, *:before, *:after {
-  box-sizing: inherit;
+    box-sizing: inherit;
 }
 a {
     text-decoration: none;
@@ -34,10 +34,84 @@ a {
     background-image: url("../Designs/Images/olu-eletu-38647-unsplash.jpg");
     background-size: cover;
     height: 585px;
+    display: block;
+    font: bold 40px "Microsoft Tai Le Bold", Calibri, Georgia;
+    padding: 10px;
+    color: #000066;
+    text-align: right;
 }
+.hero2 {
+    background-image: url("../Designs/Images/olu-eletu-38647-unsplash.jpg");
+    background-size: cover;
+    height: 685px;
+    display: block;
+    font: bold 50px "Microsoft Tai Le Bold", Calibri, Georgia;
+    padding: 20px;
+    color: #000066;
+    float: left;
+}
+#myInput {
+    background-image: url("/Designs/Images/search_icon.png");
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    width: 80%;
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+}
+
+#myTable {
+    border-collapse: collapse;
+    width: 80%;
+    border: 1px solid #ddd;
+    font-size: 18px;
+    background-color: #ffffff;
+}
+
+#myTable th, #myTable td {
+    text-align: left;
+    padding: 12px;
+}
+
+#myTable tr {
+    border-bottom: 1px solid #ddd;
+}
+
+#myTable tr:hover {
+    background-color: #f1f1f1;
+}
+#myTable tr.header {
+    background-color: darkslategray;
+}
+.view_button {
+    background-color: darkslategray;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition: 0.3s;
+    float: right;
+    width: auto;
+}
+.register_button {
+    background-color: gainsboro;
+    border: none;
+    color: darkslategray;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition: 0.3s;
+    width: auto;
+
+}
+.register_button:hover {opacity: 1}
+
 .hero h3 {
     font: bold 24px "Microsoft Tai Le Bold", Calibri, Georgia;
-
 }
 
 .nav {
@@ -55,7 +129,7 @@ a {
 .nav li {
     text-align: right;
     list-style-type: none;
-    }
+}
 
 /* Add a black background color to the top navigation */
 .topnav {
