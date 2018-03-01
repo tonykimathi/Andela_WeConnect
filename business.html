@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Businesses | Welcome</title>
+    <link rel="stylesheet" href="../Andela_WeConnect/CSS/Style.css">
+    <link rel="stylesheet" href="../Andela_WeConnect/CSS/fontawesome.min.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <nav>
+            <ul class="nav">
+                <li class="WeConnect"><a href="#">WeConnect</a></li>
+                <li class="WeConnect"><a class="active" href="#">Businesses</a></li>
+                <li class="WeConnect"><a href="#">Profile</a></li>
+                <li class="login"><a href="#" class="right"><i class="fas fa-sign-in-alt"></i>LOGOUT</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="hero2">
+    <div class="container">
+        <div class="welcome_text" style="background-color: #ffffff; width: 36%">
+            <h4>Welcome, Username!</h4>
+        </div>
+    </div>
+    <div class="container">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for business.." title="Type in a name">
+
+        <table id="myTable">
+            <tr class="header">
+                <th style="width:20%;">Name</th>
+                <th style="width:40%;">Description</th>
+                <th style="width:15%;">Category</th>
+                <th style="width:20%;">Location</th>
+                <th style="width:5%;">Reviews</th>
+                <td></td>
+            </tr>
+            <tr>
+                <td>St. Pius X Academy</td>
+                <td>This is a private primary school <br>
+                    that was established in 2015 to provide <br>
+                    education in the rural areas.</td>
+                <td>School</td>
+                <td>Meru County</td>
+                <td>1</td>
+                <td><button class="view_button" type="button">View Profile</button></td>
+            </tr>
+
+            <tr>
+                <td>Mama Lucy Hospital</td>
+                <td>This is a government-owned hospital <br>
+                    that was established in 2012 to provide <br>
+                    health services for people in Nairobi.</td>
+                <td>Hospital</td>
+                <td>Nairobi County</td>
+                <td>3</td>
+                <td><button class="view_button" type="button">View Profile</button></td>
+            </tr>
+        </table>
+
+    </div>
+    <button class="register_button" type="button">Register business</button>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>Copyright &copy; 2018. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
