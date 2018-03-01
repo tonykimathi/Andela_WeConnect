@@ -238,6 +238,7 @@ button:hover {
     padding: 16px;
     display: block;
     text-align: center;
+    font: 15px "Microsoft Tai Le Bold", Calibri, Georgia;
 }
 .rcontainer {
     padding: 16px;
