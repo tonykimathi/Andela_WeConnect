@@ -33,12 +33,22 @@ a {
 .hero {
     background-image: url("../Designs/Images/olu-eletu-38647-unsplash.jpg");
     background-size: cover;
-    height: 585px;
+    height: 750px;
     display: block;
     font: bold 40px "Microsoft Tai Le Bold", Calibri, Georgia;
     padding: 10px;
     color: #000066;
     text-align: right;
+}
+.hero2 {
+    background-image: url("../Designs/Images/olu-eletu-38647-unsplash.jpg");
+    background-size: cover;
+    height: 750px;
+    display: block;
+    font: bold 40px "Microsoft Tai Le Bold", Calibri, Georgia;
+    padding: 10px;
+    color: #000066;
+    text-align: left;
 }
 .hero3 {
     background-image: url("../Designs/Images/olu-eletu-38647-unsplash.jpg");
