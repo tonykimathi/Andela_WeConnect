@@ -48,3 +48,5 @@ class Data():
 
 
 class User():
+
+    def create_user(self):
