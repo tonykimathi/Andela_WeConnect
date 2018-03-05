@@ -36,17 +36,15 @@ class Data():
         self.reviews_data = [
             {
                 'id': '4',
-                'name': 'St. Pius X Academy',
-                'description': 'This is a primary school that was established in 2015',
-                'location': 'Meru County',
-                'category': 'School'
+                'title': 'School review',
+                'body': 'Really good school with a commendable K.C.P.E record.',
             },
             {
                 'id': '5',
-                'name': 'Saika Medical Center',
-                'description': 'This is a medical clinic that primarily cares for outpatients',
-                'location': 'Nairobi County',
-                'category': 'Hospital'
+                'title': 'Hospital review',
+                'body': 'I did not like the customer service',
             }
         ]
 
+
+class User():
