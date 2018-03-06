@@ -4,7 +4,7 @@ class Data():
     user_data = [
         {'id': '1',
          'username': 'Tony93',
-         'email': 'tonymputhia@emaill.com',
+         'email': 'tonymputhia@email.com',
          'password': 'password1',
          },
 
@@ -53,23 +53,32 @@ class User():
 
         for user in Data.user_data:
             if email == user['email']:
-                return "Account with Username already exists. Please log in."
-            if username == user['username']:
                 return "Account with Email already exists. Please log in."
-
+            elif username == user['username']:
+                return "Account with Username already exists. Please log in."
         if len(password) < 6:
             return "Input a password that is at least 6 characters long."
 
-        elif password == confirm_password:
+        if password == confirm_password:
             self.user_dict['username'] = username
             self.user_dict['email'] = email
             self.user_dict['password'] = password
 
             Data.user_data.append(self.user_dict)
+        else:
+            return "Passwords do not match. Try again."
+        return "User created successfully."
 
-            return "User created successfully."
+    @staticmethod
+    def login_user(email, password):
+        for user in Data.user_data:
+            if email == user['email']:
+                if password == user['password']:
+                    return "Successfully logged in!"
+                return "Wrong Password. Try again."
+        return "You have no account,please sign up"
 
-        return "Passwords do not match. Try again."
+
 
 
 
