@@ -1,13 +1,13 @@
 import unittest
+import json
 from app.models import User
+# from app import create_app
+from app.views import app
 
 
 class UserTestCase(unittest.TestCase):
     def setUp(self):
         self.user = User()
-
-    def tearDown(self):
-        del self.user
 
     def test_user_created_successfully(self):
         response = self.user.create_user("Tonto", "tonto@email", "password80", "password80")
@@ -38,3 +38,31 @@ class UserTestCase(unittest.TestCase):
     def test_successful_login(self):
         response = self.user.login_user("tonymputhia@email.com", "password1")
         self.assertEqual(response, 'Successfully logged in!')
+
+    def tearDown(self):
+        del self.user
+
+
+class UserEndpointsTestCase(unittest.TestCase):
+    def setUp(self):
+        self.client = app.test_client(self)
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="password1", confirm_password="password1")),
+                         content_type="application/json")
+
+    def test_successful_registration(self):
+        response = self.client.post("/api/v1/auth/register",
+                                    data=json.dumps(dict(username="tim", email="timmputhia@email.com",
+                                                         password="password234", confirm_password="password234")),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 201)
+
+    def test_already_registered(self):
+        response = self.client.post("/api/v1/auth/register",
+                                    data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                                         password="password1", confirm_password="password1")),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+
+

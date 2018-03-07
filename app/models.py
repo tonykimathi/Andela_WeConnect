@@ -60,6 +60,7 @@ class User():
             return "Input a password that is at least 6 characters long."
 
         if password == confirm_password:
+            self.user_dict['id'] = self.id
             self.user_dict['username'] = username
             self.user_dict['email'] = email
             self.user_dict['password'] = password
