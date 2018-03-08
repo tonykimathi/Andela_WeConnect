@@ -9,5 +9,5 @@ install:
 # command to run tests
 script:
   - nosetests Tests/test_WeConnect.py -v
- after_success:
+after_success:
   - coveralls
