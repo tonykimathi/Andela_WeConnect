@@ -25,9 +25,12 @@ def signup():
         password = request.json['password']
         confirm_password = request.json['confirm_password']
         msg = user_object.create_user(username, email, password, confirm_password)
-        response = jsonify(msg)
-        # response.status_code = 201
-        return response
+
+        if msg == 'User created successfully.':
+            return jsonify(msg), 201
+        elif msg == 'Account with Username already exists. Please log in.' or \
+                'Account with Email already exists. Please log in.' or 'Passwords do not match. Try again.':
+            return jsonify(msg), 403
 
 
 @app.route('/api/v1/auth/login', methods=['GET', 'POST'])
@@ -39,7 +42,6 @@ def login():
         session['email'] = email
         msg = user_object.login_user(email, password)
         response = jsonify(msg)
-        # response.status_code = 200
         return response
 
 
@@ -50,5 +52,18 @@ def logout():
         session.pop('email', None)
         return jsonify({"message": "Logout successful"})
     return jsonify({"message": "You are not logged in"})
+
+
+@app.route('/api/v1/auth/reset-password', methods=['POST'])
+def reset_password():
+    """ User reset password """
+    if request.method == "POST":
+        email = request.json['email']
+        password = request.json['password']
+        confirm_password = request.json['confirm_password']
+        msg = user_object.reset_password(email, password, confirm_password)
+        return jsonify(msg), 200
+
+
 
 
