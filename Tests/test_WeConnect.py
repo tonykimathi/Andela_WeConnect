@@ -61,6 +61,10 @@ class ModelsTestCase(unittest.TestCase):
         response = self.business.create_business("2", "St. Pius X Academy", "Record Label", "Nairobi", "Music")
         self.assertEqual(response['msg'], 'Business name already exists. Enter a new one.')
 
+    def test_delete_business(self):
+        response = self.business.delete_business("2")
+        self.assertEqual(response['msg'], 'The business has been deleted successfully.')
+
     def tearDown(self):
         del self.user
 
@@ -136,4 +140,23 @@ class EndpointsTestCase(unittest.TestCase):
                                                         location="Lodwar County",
                                                         category="School")),
                                    content_type="application/json")
+        self.assertEqual(response.status_code, 204)
+
+    def test_delete_business_profile(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(user_id="3", business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        response = self.client.delete("/v1/api/businesses/<businessId>",
+                                      data=json.dumps(dict(businessId="3")), content_type="application/json")
         self.assertEqual(response.status_code, 204)
