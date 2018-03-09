@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tonykimathi/Andela_WeConnect.svg?branch=ft-user-registration-login-155701739)](https://travis-ci.org/tonykimathi/Andela_WeConnect)
+
 # WeConnect
 
 WeConnect provides a platform that brings businesses and individuals together. 

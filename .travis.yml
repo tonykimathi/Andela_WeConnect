@@ -8,6 +8,6 @@ install:
   - pip install coveralls
 # command to run tests
 script:
-  - nosetests Tests/test_WeConnect.py -v
+  - nosetests --with-coverage --cover-package=app
 after_success:
   - coveralls
