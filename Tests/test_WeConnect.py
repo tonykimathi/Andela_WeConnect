@@ -1,7 +1,6 @@
 import unittest
 import json
-from app.models import User
-# from app import create_app
+from app.user import User
 from app.views import app
 
 
@@ -11,45 +10,46 @@ class UserTestCase(unittest.TestCase):
 
     def test_user_created_successfully(self):
         response = self.user.create_user("Tonto", "tonto@email.com", "Password80*", "Password80*")
-        self.assertEqual(response, 'User created successfully.')
+        self.assertEqual(response['msg'], 'User created successfully.')
 
     def test_signup_with_existing_email(self):
         self.user.create_user("Tom", "tom@email.com", "Password80*", "Password80*")
         response = self.user.create_user("Tom2", "tom@email.com", "password80", "password80")
-        self.assertEqual(response, 'Account with Email already exists. Please log in.')
+        self.assertEqual(response['msg'], 'Account with Email already exists. Please log in.')
 
     def test_signup_with_wrong_email_format(self):
         response = self.user.create_user("Tom2", "tom@email", "Password80*", "Password80*")
-        self.assertEqual(response, 'Please provide a valid email address')
+        self.assertEqual(response['msg'], 'Please provide a valid email address')
 
     def test_signup_with_wrong_username_format(self):
         response = self.user.create_user("Tom2@", "tom@email", "Password80*", "Password80*")
-        self.assertEqual(response, 'These special characters (. , ! space []) should not be in your username.')
+        self.assertEqual(response['msg'], 'These special characters (. , ! space []) should not be in your username.')
 
     def test_signup_with_existing_username(self):
         self.user.create_user("Tom", "tom808@email.com", "Password808*", "Password808*")
         response = self.user.create_user("Tom", "tom8082@email", "password808", "password808")
-        self.assertEqual(response, 'Account with Username already exists. Please log in.')
+        self.assertEqual(response['msg'], 'Account with Username already exists. Please log in.')
 
     def test_length_of_password(self):
         response = self.user.create_user("Tom808", "tom808@email.com", "pass", "pass")
-        self.assertEqual(response, 'Input a password that is at least 6 characters long.')
+        self.assertEqual(response['msg'], 'Input a password that is at least 6 characters long.')
 
     def test_signup_with_wrong_password_format(self):
         response = self.user.create_user("Tom20", "tom20@email.com", "password80", "password80")
-        self.assertEqual(response, 'Your password should have at least 1 capital letter, special character and number.')
+        self.assertEqual(response['msg'], 'Your password should have at least 1 capital letter, special character'
+                                          ' and number.')
 
     def test_passwords_do_not_match(self):
         response = self.user.create_user("Tom808", "tom808@email.com", "Password808*", "Password808")
-        self.assertEqual(response, 'Passwords do not match. Try again.')
+        self.assertEqual(response['msg'], 'Passwords do not match. Try again.')
 
     def test_failed_login(self):
         response = self.user.login_user("tonto@email.com", "Password80*")
-        self.assertEqual(response, 'You have no account,please sign up')
+        self.assertEqual(response['msg'], 'You have no account,please sign up')
 
     def test_successful_login(self):
         response = self.user.login_user("tonymputhia@email.com", "Password1*")
-        self.assertEqual(response, 'Successfully logged in!')
+        self.assertEqual(response['msg'], 'Successfully logged in!')
 
     def tearDown(self):
         del self.user
