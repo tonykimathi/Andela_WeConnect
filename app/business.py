@@ -23,7 +23,7 @@ class Business():
             if business_name == business['business_name']:
                 return {"msg": "Business name already exists. Enter a new one."}
             for user in Data.user_data:
-                if user_id == user[user_id]:
+                if user_id == user['user_id']:
                     self.business_dict['user_id'] = user_id
                     self.business_dict['businessId'] = self.businessId
                     self.business_dict['business_name'] = business_name
