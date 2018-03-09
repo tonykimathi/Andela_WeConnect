@@ -114,3 +114,11 @@ def get_businesses():
         return jsonify(msg), 200
     return jsonify({"message": "Incorrect http verb"})
 
+
+@app.route('/v1/api/businesses/<businessId>', methods=['GET'])
+def get_business_by_id(businessId):
+    if request.method == "GET":
+        msg = business_object.get_business_by_id(businessId)
+        return jsonify(msg)
+    return jsonify({"message": "Incorrect http verb"}), 200
+
