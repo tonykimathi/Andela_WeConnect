@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tonykimathi/Andela_WeConnect.svg?branch=ft-user-registration-login-155701739)](https://travis-ci.org/tonykimathi/Andela_WeConnect)
+[![Coverage Status](https://coveralls.io/repos/github/tonykimathi/Andela_WeConnect/badge.svg)](https://coveralls.io/github/tonykimathi/Andela_WeConnect)
 # WeConnect
 
 WeConnect provides a platform that brings businesses and individuals together. 
@@ -24,21 +26,33 @@ These instructions will get you a copy of the project up and running on your loc
      
 ### Usage
 
-The WeConnect App provides an interactive Graphical User Interface which is easy for users and business owners to interact with.
+To test our project on your terminal run 
 
-##### User create a user account
-![dashboard](https://github.com/ynot93/Andela_WeConnect/blob/UserInterface/Designs/Screenshots/dashboard-page.JPG)
-![sign up](https://github.com/ynot93/Andela_WeConnect/blob/UserInterface/Designs/Screenshots/sign-up%20page.JPG)
+``` export FLASK_APP=run.py```
 
-##### User can now login to the account
-![log in](https://github.com/ynot93/Andela_WeConnect/blob/UserInterface/Designs/Screenshots/login-page.JPG)
+then
 
-##### User can view businesses in their profile and write business reviews
-![businesses](https://github.com/ynot93/Andela_WeConnect/blob/UserInterface/Designs/Screenshots/business-page.JPG)
+``` flask run ```
 
-##### Owners can view profiles and edit business reviews
-![profile](https://github.com/ynot93/Andela_WeConnect/blob/UserInterface/Designs/Screenshots/profile-page.JPG)
+on your browser open up [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 
-## Authors
+### Api Endpoints
+
+| Endpoint | Functionality |
+| -------- | ------------- |
+| POST /api/v1/auth/register | Creates a user account |
+| POST /api/v1/auth/login | Logs in a user |
+| POST /api/v1/auth/logout | Logs out a user |
+| POST /api/v1/auth/reset-password  | Password reset |
+| POST /v1/api/businesses | Register a business |
+| GET /v1/api/businesses  | Retrieves all businesses |
+| PUT /v1/api/businesses/<businessId> | Updates a business profile |
+| DELETE /v1/api/businesses/<businessId> | Remove a business |
+| GET /v1/api/businesses | Get businesses |
+| GET /v1/api/businesses/<businessId> | Get a business |
+| POST /v1/api/businesses/<businessId>/reviews | Add a review for a business |
+| GET /v1/api/businesses/<businessId>/reviews | Get all reviews for a business |
+
+## Author
 
 * [tonykimathi](https://github.com/tonykimathi)
