@@ -35,13 +35,13 @@ class Data():
 
     reviews_data = [
         {'review_id': '1',
-         'business _id': '1',
+         'businessId': '1',
          'review_name': 'School review',
          'body': 'Really good school with a commendable K.C.P.E record.',
          },
 
         {'review_id': '2',
-         'business _id': '2',
+         'businessId': '1',
          'review_name': 'Hospital review',
          'body': 'I did not like the customer service',
          }

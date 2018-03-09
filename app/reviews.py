@@ -11,13 +11,14 @@ class Reviews():
     def create_review(self, businessId, review_name, body):
         for review in Data.reviews_data:
             if businessId == review['businessId']:
-                self.review_dict['businessId'] = self.review_id
+                self.review_dict['businessId'] = businessId
+                self.review_dict['review_id'] = self.review_id
                 self.review_dict['review_name'] = review_name
                 self.review_dict['body'] = body
 
                 Data.reviews_data.append(self.review_dict)
 
-                return {"msg": "Review added successfully.", "review_data": self.review_dict}
+                return {"msg": "Review added successfully.", "review_data": self.review_dict}, 201
             return {"msg": "That business does not exist."}
 
     @staticmethod
