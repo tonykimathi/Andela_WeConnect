@@ -86,3 +86,16 @@ def create_business():
     return jsonify({"message": "Incorrect http verb"})
 
 
+@app.route('/v1/api/businesses/<businessId>', methods=['PUT'])
+def update_business_profile(businessId):
+    if request.method == "PUT":
+        business_name = request.json['business_name']
+        description = request.json['description']
+        location = request.json['location']
+        category = request.json['category']
+
+        msg = business_object.update_business(businessId, business_name, description, location, category)
+        return jsonify(msg['msg']), 204
+    return jsonify({"message": "Incorrect http verb"})
+
+
