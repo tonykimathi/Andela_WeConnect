@@ -9,7 +9,8 @@ class Business():
 
     @staticmethod
     def get_all_businesses():
-        return {"all_businesses": Data.business_data}
+        for business in Data.business_data:
+            return {"all_businesses": business}
 
     @staticmethod
     def get_business_by_id(businessId):

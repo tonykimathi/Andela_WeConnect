@@ -105,3 +105,12 @@ def delete_business(businessId):
         msg = business_object.delete_business(businessId)
         return jsonify(msg), 204
     return jsonify({"message": "Incorrect http verb"})
+
+
+@app.route('/v1/api/businesses', methods=['GET'])
+def get_businesses():
+    if request.method == "GET":
+        msg = business_object.get_all_businesses()
+        return jsonify(msg), 200
+    return jsonify({"message": "Incorrect http verb"})
+
