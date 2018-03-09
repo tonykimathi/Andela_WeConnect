@@ -2,6 +2,7 @@ import unittest
 import json
 from app.user import User
 from app.business import Business
+from app.reviews import Reviews
 from app.views import app
 
 
@@ -9,6 +10,7 @@ class ModelsTestCase(unittest.TestCase):
     def setUp(self):
         self.user = User()
         self.business = Business()
+        self.review = Reviews()
 
     def test_user_created_successfully(self):
         response = self.user.create_user("Tonto", "tonto@email.com", "Password80*", "Password80*")
