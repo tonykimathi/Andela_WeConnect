@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/tonykimathi/Andela_WeConnect.svg?branch=ft-user-registration-login-155701739)](https://travis-ci.org/tonykimathi/Andela_WeConnect)
-[![Coverage Status](https://coveralls.io/repos/github/tonykimathi/Andela_WeConnect/badge.svg?branch=Develop)](https://coveralls.io/github/tonykimathi/Andela_WeConnect?branch=Develop)# WeConnect
+[![Coverage Status](https://coveralls.io/repos/github/tonykimathi/Andela_WeConnect/badge.svg?branch=Develop)](https://coveralls.io/github/tonykimathi/Andela_WeConnect?branch=Develop)
+# WeConnect
 
 WeConnect provides a platform that brings businesses and individuals together. 
 This platform creates awareness for businesses and gives the users the ability 
