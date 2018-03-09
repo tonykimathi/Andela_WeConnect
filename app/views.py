@@ -99,3 +99,9 @@ def update_business_profile(businessId):
     return jsonify({"message": "Incorrect http verb"})
 
 
+@app.route('/v1/api/businesses/<businessId>', methods=['DELETE'])
+def delete_business(businessId):
+    if request.method == "DELETE":
+        msg = business_object.delete_business(businessId)
+        return jsonify(msg), 204
+    return jsonify({"message": "Incorrect http verb"})
