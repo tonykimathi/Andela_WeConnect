@@ -1,12 +1,16 @@
 import unittest
 import json
 from app.user import User
+from app.business import Business
+from app.reviews import Reviews
 from app.views import app
 
 
-class UserTestCase(unittest.TestCase):
+class ModelsTestCase(unittest.TestCase):
     def setUp(self):
         self.user = User()
+        self.business = Business()
+        self.review = Reviews()
 
     def test_user_created_successfully(self):
         response = self.user.create_user("Tonto", "tonto@email.com", "Password80*", "Password80*")
@@ -51,11 +55,23 @@ class UserTestCase(unittest.TestCase):
         response = self.user.login_user("tonymputhia@email.com", "Password1*")
         self.assertEqual(response['msg'], 'Successfully logged in!')
 
+    def test_business_created_successfully(self):
+        response = self.business.create_business("1", "Baller Entertainment", "Record Label", "Nairobi", "Music")
+        self.assertEqual(response['msg'], 'Business created successfully.')
+
+    def test_business_name_exists(self):
+        response = self.business.create_business("2", "St. Pius X Academy", "Record Label", "Nairobi", "Music")
+        self.assertEqual(response['msg'], 'Business name already exists. Enter a new one.')
+
+    def test_delete_business(self):
+        response = self.business.delete_business("2")
+        self.assertEqual(response['msg'], 'The business has been deleted successfully.')
+
     def tearDown(self):
         del self.user
 
 
-class UserEndpointsTestCase(unittest.TestCase):
+class EndpointsTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client(self)
 
@@ -104,3 +120,100 @@ class UserEndpointsTestCase(unittest.TestCase):
                                                          category="School")),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 201)
+
+    def test_update_business_profile(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(user_id="3", business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        response = self.client.put("/v1/api/businesses/<businessId>",
+                                   data=json.dumps(dict(businessId="3", business_name="Gilgil Academy",
+                                                        description="This is a secondary school established in 2015",
+                                                        location="Lodwar County",
+                                                        category="School")),
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 204)
+
+    def test_delete_business_profile(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(user_id="3", business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        response = self.client.delete("/v1/api/businesses/<businessId>",
+                                      data=json.dumps(dict(businessId="3")), content_type="application/json")
+        self.assertEqual(response.status_code, 204)
+
+    def test_view_businesses(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        response = self.client.get("/v1/api/businesses", content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_businesses_by_id(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        response = self.client.get("/v1/api/businesses/<businessId>",
+                                   data=json.dumps(dict(businessId="2")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_review(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        response = self.client.post("/v1/api/businesses/<businessId>/reviews",
+                                    data=json.dumps(dict(businessId="2", review_name="First Review",
+                                                         body="It's a nice clinic")),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 201)
+
+    def get_all_reviews(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        response = self.client.get("/v1/api/businesses/<businessId>/reviews",
+                                   data=json.dumps(dict(businessId="2")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
