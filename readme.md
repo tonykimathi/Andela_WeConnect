@@ -49,7 +49,7 @@ on your browser open up [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 | PUT /v1/api/businesses/<businessId> | Updates a business profile |
 | DELETE /v1/api/businesses/<businessId> | Remove a business |
 | GET /v1/api/businesses | Get businesses |
-| GET /v1/api/businesses/<businessId> | Get a business |
+| GET /v1/api/businesses/<businessId> | Get one business |
 | POST /v1/api/businesses/<businessId>/reviews | Add a review for a business |
 | GET /v1/api/businesses/<businessId>/reviews | Get all reviews for a business |
 
