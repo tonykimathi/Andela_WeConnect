@@ -132,4 +132,11 @@ def add_review(businessId):
         return jsonify(msg['msg']), 201
     return jsonify({"message": "Incorrect http verb"})
 
+@app.route('/v1/api/businesses/<businessId>/reviews', methods=['GET'])
+def get_all_reviews(businessId):
+    if request.method == "GET":
+        msg = review_object.get_all_reviews(businessId)
+        return jsonify(msg['msg']), 200
+    return jsonify({"message": "Incorrect http verb"})
+
 
