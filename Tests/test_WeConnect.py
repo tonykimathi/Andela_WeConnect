@@ -172,3 +172,17 @@ class EndpointsTestCase(unittest.TestCase):
                          content_type="application/json")
         response = self.client.get("/v1/api/businesses", content_type="application/json")
         self.assertEqual(response.status_code, 200)
+
+    def test_view_businesses_by_id(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        response = self.client.get("/v1/api/businesses/<businessId>",
+                                   data=json.dumps(dict(businessId="2")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
