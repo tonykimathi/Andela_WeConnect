@@ -1,9 +1,13 @@
 from flask_api import FlaskAPI
 from flask import jsonify, request, session
-from app.models import User
+from app.user import User
+from app.business import Business
+from app.reviews import Reviews
 
 
 user_object = User()
+business_object = Business()
+review_object = Reviews()
 
 app = FlaskAPI(__name__, instance_relative_config=True)
 app.config.from_object('config')
@@ -26,11 +30,12 @@ def signup():
         confirm_password = request.json['confirm_password']
         msg = user_object.create_user(username, email, password, confirm_password)
 
-        if msg == 'User created successfully.':
-            return jsonify(msg), 201
-        elif msg == 'Account with Username already exists. Please log in.' or \
+        if msg['msg'] == 'User created successfully.':
+            return jsonify(msg['msg']), 201
+        elif msg['msg'] == 'Account with Username already exists. Please log in.' or \
                 'Account with Email already exists. Please log in.' or 'Passwords do not match. Try again.':
-            return jsonify(msg), 403
+            return jsonify(msg['msg']), 403
+    return jsonify({"message": "Incorrect http verb"})
 
 
 @app.route('/api/v1/auth/login', methods=['GET', 'POST'])
@@ -41,16 +46,18 @@ def login():
         password = request.json['password']
         session['email'] = email
         msg = user_object.login_user(email, password)
-        response = jsonify(msg)
+        response = jsonify(msg['msg'])
         return response
+    return jsonify({"message": "Incorrect http verb"})
 
 
 @app.route('/api/v1/auth/logout', methods=['POST'])
 def logout():
     """ User logout """
-    if session.get('email') is not None:
-        session.pop('email', None)
-        return jsonify({"message": "Logout successful"})
+    if request.method == "POST":
+        if session.get('email') is not None:
+            session.pop('email', None)
+            return jsonify({"message": "Logout successful"})
     return jsonify({"message": "You are not logged in"})
 
 
@@ -63,7 +70,73 @@ def reset_password():
         confirm_password = request.json['confirm_password']
         msg = user_object.reset_password(email, password, confirm_password)
         return jsonify(msg), 200
+    return jsonify({"message": "Incorrect http verb"})
 
 
+@app.route('/v1/api/businesses', methods=['GET', 'POST'])
+def create_business():
+    if request.method == "POST":
+        user_id = request.json['user_id']
+        business_name = request.json['business_name']
+        description = request.json['description']
+        location = request.json['location']
+        category = request.json['category']
+        msg = business_object.create_business(user_id, business_name, description, location, category)
+        return jsonify(msg['msg']), 201
+    return jsonify({"message": "Incorrect http verb"})
 
 
+@app.route('/v1/api/businesses/<businessId>', methods=['PUT'])
+def update_business_profile(businessId):
+    if request.method == "PUT":
+        business_name = request.json['business_name']
+        description = request.json['description']
+        location = request.json['location']
+        category = request.json['category']
+
+        msg = business_object.update_business(businessId, business_name, description, location, category)
+        return jsonify(msg['msg'])
+    return jsonify({"message": "Incorrect http verb"})
+
+
+@app.route('/v1/api/businesses/<businessId>', methods=['DELETE'])
+def delete_business(businessId):
+    if request.method == "DELETE":
+        msg = business_object.delete_business(businessId)
+        return jsonify(msg['msg'])
+    return jsonify({"message": "Incorrect http verb"})
+
+
+@app.route('/v1/api/businesses', methods=['GET'])
+def get_businesses():
+    if request.method == "GET":
+        msg = business_object.get_all_businesses()
+        return jsonify(msg['msg'])
+    return jsonify({"message": "Incorrect http verb"})
+
+
+@app.route('/v1/api/businesses/<businessId>', methods=['GET'])
+def get_business_by_id(businessId):
+    if request.method == "GET":
+        msg = business_object.get_business_by_id(businessId)
+        return jsonify(msg['msg'])
+    return jsonify({"message": "Incorrect http verb"})
+
+
+@app.route('/v1/api/businesses/<businessId>/reviews', methods=['POST'])
+def add_review(businessId):
+    if request.method == "POST":
+        businessId = request.json['businessId']
+        review_name = request.json['review_name']
+        body = request.json['body']
+        msg = review_object.create_review(businessId, review_name, body)
+        return jsonify(msg['msg'])
+    return jsonify({"message": "Incorrect http verb"})
+
+
+@app.route('/v1/api/businesses/<businessId>/reviews', methods=['GET'])
+def get_all_reviews(businessId):
+    if request.method == "GET":
+        msg = review_object.get_all_reviews(businessId)
+        return jsonify(msg['msg'])
+    return jsonify({"message": "Incorrect http verb"})
