@@ -5,10 +5,24 @@ from app.data import Data
 class User():
 
     def __init__(self):
+
+        """
+            User object initializer.
+        """
+
         self.user_dict = {}
         self.user_id = len(Data.user_data) + 1
 
     def create_user(self, username, email, password, confirm_password):
+
+        """
+            Creates user objects.
+            Arguments:
+                Username: A unique identify for the user.
+                Email: Personal email of the user.
+                Password: A secret security key.
+        """
+
         if email is None:
             return {"msg": "Please input an email address"}
         if username is None:
@@ -47,6 +61,14 @@ class User():
 
     @staticmethod
     def login_user(email, password):
+
+        """
+            Logs in user.
+            Arguments:
+                Email: Personal email of the user.
+                Password: A secret security key.
+        """
+
         for user in Data.user_data:
             if email == user['email']:
                 if password == user['password']:
@@ -55,6 +77,14 @@ class User():
         return {"msg": "You have no account,please sign up"}
 
     def reset_password(self, email, new_password, confirm_new_password):
+
+        """
+            Resets user's password.
+            Arguments:
+                Email: Personal email of the user.
+                New Password: A secret security key.
+        """
+        
         for user in Data.user_data:
             if email == user['email']:
                 if new_password == confirm_new_password:
