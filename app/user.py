@@ -18,7 +18,7 @@ class User():
         """
             Creates user objects.
             Arguments:
-                Username: A unique identify for the user.
+                Username: A unique identifier for the user.
                 Email: Personal email of the user.
                 Password: A secret security key.
         """
@@ -84,7 +84,7 @@ class User():
                 Email: Personal email of the user.
                 New Password: A secret security key.
         """
-        
+
         for user in Data.user_data:
             if email == user['email']:
                 if new_password == confirm_new_password:
