@@ -42,7 +42,7 @@ class Reviews():
             Arguments:
                 Business ID: A unique identifier for the business.
         """
-        
+
         for review in Data.reviews_data:
             if businessId == review['businessId']:
                 return {"all_reviews": Data.reviews_data}

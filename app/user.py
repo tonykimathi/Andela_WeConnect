@@ -11,7 +11,6 @@ class User():
         """
 
         self.user_dict = {}
-        self.user_id = len(Data.user_data) + 1
 
     def create_user(self, username, email, password, confirm_password):
 
@@ -22,6 +21,7 @@ class User():
                 Email: Personal email of the user.
                 Password: A secret security key.
         """
+        user_id = len(Data.user_data) + 1
 
         if email is None:
             return {"msg": "Please input an email address"}
@@ -49,7 +49,7 @@ class User():
             return {"msg": "Your password should have at least 1 capital letter, special character and number."}
 
         if password == confirm_password:
-            self.user_dict['user_id'] = self.user_id
+            self.user_dict['user_id'] = user_id
             self.user_dict['username'] = username
             self.user_dict['email'] = email
             self.user_dict['password'] = password
@@ -57,10 +57,9 @@ class User():
             Data.user_data.append(self.user_dict)
         else:
             return {"msg": "Passwords do not match. Try again."}
-        return {"msg": "User created successfully.", "user_data": self.user_dict}
+        return {'msg': 'User created successfully.', 'user_data': self.user_dict}
 
-    @staticmethod
-    def login_user(email, password):
+    def login_user(self, email, password):
 
         """
             Logs in user.
@@ -72,7 +71,7 @@ class User():
         for user in Data.user_data:
             if email == user['email']:
                 if password == user['password']:
-                    return {"msg": "Successfully logged in!"}
+                    return {"msg": "Successfully logged in!", 'user_data': self.user_dict}
                 return {"msg": "Wrong Password. Try again."}
         return {"msg": "You have no account,please sign up"}
 
@@ -90,4 +89,3 @@ class User():
                 if new_password == confirm_new_password:
                     self.user_dict['password'] = new_password
                     return {"message": "Your password has been reset"}
-

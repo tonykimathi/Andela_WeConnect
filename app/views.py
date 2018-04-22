@@ -31,10 +31,10 @@ def signup():
         msg = user_object.create_user(username, email, password, confirm_password)
 
         if msg['msg'] == 'User created successfully.':
-            return jsonify(msg['msg']), 201
+            return jsonify(msg), 201
         elif msg['msg'] == 'Account with Username already exists. Please log in.' or \
                 'Account with Email already exists. Please log in.' or 'Passwords do not match. Try again.':
-            return jsonify(msg['msg']), 403
+            return jsonify(msg), 403
     return jsonify({"message": "Incorrect http verb"})
 
 
@@ -46,8 +46,11 @@ def login():
         password = request.json['password']
         session['email'] = email
         msg = user_object.login_user(email, password)
-        response = jsonify(msg['msg'])
-        return response
+
+        if msg['msg'] == 'Successfully logged in!':
+            return jsonify(msg), 200
+        elif msg['msg'] == 'Wrong Password. Try again.' or 'You have no account,please sign up':
+            return jsonify(msg), 401
     return jsonify({"message": "Incorrect http verb"})
 
 
@@ -82,7 +85,7 @@ def create_business():
         location = request.json['location']
         category = request.json['category']
         msg = business_object.create_business(user_id, business_name, description, location, category)
-        return jsonify(msg['msg']), 201
+        return jsonify(msg), 201
     return jsonify({"message": "Incorrect http verb"})
 
 
@@ -95,7 +98,7 @@ def update_business_profile(businessId):
         category = request.json['category']
 
         msg = business_object.update_business(businessId, business_name, description, location, category)
-        return jsonify(msg['msg']), 204
+        return jsonify(msg), 204
     return jsonify({"message": "Incorrect http verb"})
 
 
@@ -129,14 +132,13 @@ def add_review(businessId):
         review_name = request.json['review_name']
         body = request.json['body']
         msg = review_object.create_review(businessId, review_name, body)
-        return jsonify(msg['msg']), 201
+        return jsonify(msg), 201
     return jsonify({"message": "Incorrect http verb"})
+
 
 @app.route('/v1/api/businesses/<businessId>/reviews', methods=['GET'])
 def get_all_reviews(businessId):
     if request.method == "GET":
         msg = review_object.get_all_reviews(businessId)
-        return jsonify(msg['msg']), 200
+        return jsonify(msg), 200
     return jsonify({"message": "Incorrect http verb"})
-
-
