@@ -10,9 +10,8 @@ class Reviews():
         """
 
         self.review_dict = {}
-        self.review_id = len(Data.reviews_data) + 1
 
-    def create_review(self, businessId, review_name, body):
+    def create_review(self, owner, businessId, review_name, body):
 
         """
             Creates Review objects.
@@ -21,11 +20,14 @@ class Reviews():
                 Review Name: A unique identify for the Review
                 Body: Information containing the actual review.
         """
+        review_id = len(Data.reviews_data) + 1
 
         for review in Data.reviews_data:
             if businessId == review['businessId']:
+
+                self.review_dict['owner'] = owner
                 self.review_dict['businessId'] = businessId
-                self.review_dict['review_id'] = self.review_id
+                self.review_dict['review_id'] = review_id
                 self.review_dict['review_name'] = review_name
                 self.review_dict['body'] = body
 
