@@ -1,0 +1,56 @@
+FORMAT: 1A
+HOST: https://boiling-caverns-75887.herokuapp.com/
+
+# WeConnect API
+
+WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with.
+
+## Homepage [/]
+
+### View The Homepage [GET]
+
+
++ Response 200 (application/json)
+
+        {
+            "greetings": "Greetings and welcome to WeConnect API"
+        }
+
+
+## Create Account [/api/v1/auth/register]
+
+### Register [POST]
+
+## Login [/api/v1/auth/login]
+
+### Login [GET]
+
+## Reset Password [/api/v1/auth/reset-password]
+
+### Password [POST]
+
+## Logout [/api/v1/auth/logout]
+
+### Logout [GET]
+
+## Create Business and GET all Business Accounts [/v1/api/businesses]
+
+### Open Business [POST]
+
+### Retrive all Businesses [GET]
+
+## Retrive and Update Business [/v1/api/businesses/<business_id>]
+
+### Retrive business by ID [GET]
+
+### Update business by ID [PUT]
+
+## Delete Business [/v1/api/businesses/<business_id]
+
+### Delete business item [DELETE]
+
+## Review Business and GET all Reviews by ID [/v1/api/businesses/<review_id>/reviews]
+
+### Review Business item [PUT]
+
+### List All Review bi ID [GET]
