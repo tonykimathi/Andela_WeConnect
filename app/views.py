@@ -90,7 +90,7 @@ def create_business():
 
             msg = business_object.create_business(owner, business_name, description, location, category)
 
-            if msg['msg'] == 'Business created successfully.':
+            if msg["message"] == "Business created successfully.":
                 return jsonify(msg), 201
             return jsonify(msg), 403
         return jsonify({"message": "Incorrect http verb"})
@@ -122,7 +122,7 @@ def delete_business(businessId):
         if request.method == "DELETE":
             owner = session['email']
             msg = business_object.delete_business(owner, businessId)
-            return jsonify(msg), 204
+            return jsonify(msg), 200
     return jsonify({"message": "You have to log in first!"})
 
 
@@ -160,6 +160,6 @@ def add_review(businessId):
 def get_all_reviews(businessId):
     if session.get('email') is not None:
         if request.method == "GET":
-            msg = review_object.get_all_reviews(businessId)
+            msg = review_object.get_all_reviews_by_business(businessId)
             return jsonify(msg), 200
     return jsonify({"message": "You have to log in first!"})

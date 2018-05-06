@@ -1,7 +1,6 @@
-from app.data import Data
+class Business(object):
 
-
-class Business():
+    business_data = []
 
     def __init__(self):
 
@@ -9,10 +8,7 @@ class Business():
             Business object initializer.
         """
 
-        self.business_dict = {}
-
-    @classmethod
-    def get_all_businesses(cls):
+    def get_all_businesses(self):
 
         """
             Views all Business objects.
@@ -20,10 +16,9 @@ class Business():
                 None.
         """
 
-        return {"all_businesses": Data.business_data}
+        return {"all_businesses": Business.business_data}
 
-    @classmethod
-    def get_business_by_id(cls, businessId):
+    def get_business_by_id(self, businessId):
 
         """
             Views a single Business object.
@@ -31,9 +26,18 @@ class Business():
                 Business ID: A unique identifier for the business.
         """
 
-        for business in Data.business_data:
+        for business in Business.business_data:
             if businessId == business['businessId']:
                 return {"specific_business": business}
+
+    def get_business_by_owner(self, owner):
+
+        """
+            Returns businesses belonging to a user
+        """
+        owner_business_list = [business for business in Business.business_data if business['owner'] == owner]
+
+        return owner_business_list
 
     def create_business(self, owner, business_name, description, location, category):
 
@@ -46,22 +50,23 @@ class Business():
                 Location: Shows where business is situated.
                 Category: Shows the business type that the business falls under.
         """
-        businessId = len(Data.business_data) + 1
+        businessId = len(Business.business_data) + 1
+        business_dict = {}
 
-        for business in Data.business_data:
-            if business_name == business['business_name']:
-                return {"msg": "Business name already exists. Enter a new one."}
+        for business in Business.business_data:
+            if business['business_name'] == business_name:
+                return {"message": "Business name already exists. Enter a new one."}
 
-            self.business_dict['owner'] = owner
-            self.business_dict['businessId'] = businessId
-            self.business_dict['business_name'] = business_name
-            self.business_dict['description'] = description
-            self.business_dict['location '] = location
-            self.business_dict['category '] = category
+        business_dict['owner'] = owner
+        business_dict['businessId'] = businessId
+        business_dict['business_name'] = business_name
+        business_dict['description'] = description
+        business_dict['location '] = location
+        business_dict['category '] = category
 
-            Data.business_data.append(self.business_dict)
+        Business.business_data.append(business_dict)
 
-            return {"msg": "Business created successfully.", "business_data": self.business_dict}
+        return {"message": "Business created successfully.", "business_data": business_dict}
 
     def update_business(self, owner, businessId, business_name, description, location, category):
 
@@ -74,36 +79,38 @@ class Business():
                 Location: Shows where business is situated.
                 Category: Shows the business type that the business falls under.
         """
-        found_business = Business.get_business_by_id(businessId)
-        found_businessId = found_business['specific_business']['businessId']
+        found_business = self.get_business_by_id(businessId)
 
-        if found_businessId == businessId:
-            found_business['specific_business']['owner'] = owner
-            found_business['specific_business']['business_name'] = business_name
-            found_business['specific_business']['description'] = description
-            found_business['specific_business']['location '] = location
-            found_business['specific_business']['category '] = category
+        if found_business:
 
-            Data.business_data.append(self.business_dict)
+            if owner == found_business["specific_business"]['owner']:
+                found_business["specific_business"]['owner'] = owner
+                found_business["specific_business"]['business_name'] = business_name
+                found_business["specific_business"]['description'] = description
+                found_business["specific_business"]['location '] = location
+                found_business["specific_business"]['category '] = category
 
-            return {"msg": "Business updated successfully.", "business_data": self.business_dict}
-        return {"msg": "The Business does not exist."}
+                Business.business_data.append(found_business)
 
-    @staticmethod
-    def delete_business(owner, businessId):
+                return {"msg": "Business updated successfully.", "business_data": found_business}
+            return {"msg": "You cannot update a business you do not own."}
+        return {"msg": "No such business exists."}
+
+    def delete_business(self, owner, businessId):
 
         """
             Deletes Business objects.
             Arguments:
                 Business ID: A unique identifier for the business to be updated.
         """
+        found_business = self.get_business_by_id(businessId)
 
-        for business in Data.business_data:
-            if owner == business["owner"]:
-                if businessId == business['businessId']:
-                    del business
+        if found_business:
 
-                    return {"msg": "The business has been deleted successfully."}
-                return {"msg": "No such business exists."}
+            if owner == found_business["specific_business"]['owner']:
+                del found_business["specific_business"]
+
+                return {"msg": "The business has been deleted successfully."}
             return {"msg": "You cannot delete a business you do not own."}
+        return {"msg": "No such business exists."}
 

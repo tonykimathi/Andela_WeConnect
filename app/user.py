@@ -1,8 +1,9 @@
 import re
-from app.data import Data
 
 
 class User():
+
+    user_data = []
 
     def __init__(self):
 
@@ -21,7 +22,7 @@ class User():
                 Email: Personal email of the user.
                 Password: A secret security key.
         """
-        user_id = len(Data.user_data) + 1
+        user_id = len(User.user_data) + 1
 
         if email is None:
             return {"msg": "Please input an email address"}
@@ -30,7 +31,7 @@ class User():
         if password is None:
             return {"msg": "Please input a password."}
 
-        for user in Data.user_data:
+        for user in User.user_data:
             if email == user['email']:
                 return {"msg": "Account with Email already exists. Please log in."}
             elif username == user['username']:
@@ -54,7 +55,7 @@ class User():
             self.user_dict['email'] = email
             self.user_dict['password'] = password
 
-            Data.user_data.append(self.user_dict)
+            User.user_data.append(self.user_dict)
         else:
             return {"msg": "Passwords do not match. Try again."}
         return {'msg': 'User created successfully.', 'user_data': self.user_dict}
@@ -68,7 +69,7 @@ class User():
                 Password: A secret security key.
         """
 
-        for user in Data.user_data:
+        for user in User.user_data:
             if email == user['email']:
                 if password == user['password']:
                     return {"msg": "Successfully logged in!", 'user_data': self.user_dict}
@@ -84,7 +85,7 @@ class User():
                 New Password: A secret security key.
         """
 
-        for user in Data.user_data:
+        for user in User.user_data:
             if email == user['email']:
                 if new_password == confirm_new_password:
                     self.user_dict['password'] = new_password
