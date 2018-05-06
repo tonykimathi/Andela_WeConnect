@@ -56,15 +56,21 @@ class ModelsTestCase(unittest.TestCase):
         self.assertEqual(response['msg'], 'Successfully logged in!')
 
     def test_business_created_successfully(self):
-        response = self.business.create_business("1", "Baller Entertainment", "Record Label", "Nairobi", "Music")
+        response = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", "Record Label",
+                                                 "Nairobi", "Music")
         self.assertEqual(response['msg'], 'Business created successfully.')
 
+    def test_review_created_successfully(self):
+        response = self.review.create_review("tonymputhia@email.com", 1, "First Review", "It's a nice clinic")
+        self.assertEqual(response['msg'], 'Review added successfully.')
+
     def test_business_name_exists(self):
-        response = self.business.create_business("2", "St. Pius X Academy", "Record Label", "Nairobi", "Music")
+        response = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", "Record Label",
+                                                 "Nairobi", "Music")
         self.assertEqual(response['msg'], 'Business name already exists. Enter a new one.')
 
     def test_delete_business(self):
-        response = self.business.delete_business("2")
+        response = self.business.delete_business("tonymputhia@email.com", 1)
         self.assertEqual(response['msg'], 'The business has been deleted successfully.')
 
     def tearDown(self):
@@ -114,7 +120,8 @@ class EndpointsTestCase(unittest.TestCase):
                                               password="Password1*")),
                          content_type="application/json")
         response = self.client.post("/v1/api/businesses",
-                                    data=json.dumps(dict(user_id="3", business_name="St. Pius X Academy",
+                                    data=json.dumps(dict(owner="tonymputhia@email.com",
+                                                         business_name="St. Pius X Academy",
                                                          description="This is a primary school established in 2015",
                                                          location="Meru County",
                                                          category="School")),
@@ -131,18 +138,20 @@ class EndpointsTestCase(unittest.TestCase):
                                               password="Password1*")),
                          content_type="application/json")
         self.client.post("/v1/api/businesses",
-                         data=json.dumps(dict(user_id="3", business_name="St. Pius X Academy",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius X Academy",
                                               description="This is a primary school established in 2015",
                                               location="Meru County",
                                               category="School")),
                          content_type="application/json")
-        response = self.client.put("/v1/api/businesses/<businessId>",
-                                   data=json.dumps(dict(businessId="3", business_name="Gilgil Academy",
+        response = self.client.put("/v1/api/businesses/1",
+                                   data=json.dumps(dict(owner="tonymputhia@email.com",
+                                                        business_name="Gilgil Academy",
                                                         description="This is a secondary school established in 2015",
                                                         location="Lodwar County",
                                                         category="School")),
                                    content_type="application/json")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
     def test_delete_business_profile(self):
         self.client.post("/api/v1/auth/register",
@@ -154,14 +163,16 @@ class EndpointsTestCase(unittest.TestCase):
                                               password="Password1*")),
                          content_type="application/json")
         self.client.post("/v1/api/businesses",
-                         data=json.dumps(dict(user_id="3", business_name="St. Pius X Academy",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius X Academy",
                                               description="This is a primary school established in 2015",
                                               location="Meru County",
                                               category="School")),
                          content_type="application/json")
-        response = self.client.delete("/v1/api/businesses/<businessId>",
-                                      data=json.dumps(dict(businessId="3")), content_type="application/json")
-        self.assertEqual(response.status_code, 204)
+        response = self.client.delete("/v1/api/businesses/1",
+                                      data=json.dumps(dict(owner="tonymputhia@email.com", businessId=1)),
+                                      content_type="application/json")
+        self.assertEqual(response.status_code, 200)
 
     def test_view_businesses(self):
         self.client.post("/api/v1/auth/register",
@@ -171,6 +182,20 @@ class EndpointsTestCase(unittest.TestCase):
         self.client.post("/api/v1/auth/login",
                          data=json.dumps(dict(email="tonymputhia@email.com",
                                               password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius XV Academy",
+                                              description="This is a secondary school established in 1989",
+                                              location="Nakuru County",
+                                              category="School")),
                          content_type="application/json")
         response = self.client.get("/v1/api/businesses", content_type="application/json")
         self.assertEqual(response.status_code, 200)
@@ -184,8 +209,15 @@ class EndpointsTestCase(unittest.TestCase):
                          data=json.dumps(dict(email="tonymputhia@email.com",
                                               password="Password1*")),
                          content_type="application/json")
-        response = self.client.get("/v1/api/businesses/<businessId>",
-                                   data=json.dumps(dict(businessId="2")), content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        response = self.client.get("/v1/api/businesses/1",
+                                   data=json.dumps(dict(businessId=1)), content_type="application/json")
 
         self.assertEqual(response.status_code, 200)
 
@@ -198,8 +230,16 @@ class EndpointsTestCase(unittest.TestCase):
                          data=json.dumps(dict(email="tonymputhia@email.com",
                                               password="Password1*")),
                          content_type="application/json")
-        response = self.client.post("/v1/api/businesses/<businessId>/reviews",
-                                    data=json.dumps(dict(businessId="2", review_name="First Review",
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        response = self.client.post("/v1/api/businesses/1/reviews",
+                                    data=json.dumps(dict(owner="tonymputhia@email.com", businessId=1,
+                                                         review_name="First Review",
                                                          body="It's a nice clinic")),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 201)
@@ -213,7 +253,15 @@ class EndpointsTestCase(unittest.TestCase):
                          data=json.dumps(dict(email="tonymputhia@email.com",
                                               password="Password1*")),
                          content_type="application/json")
-        response = self.client.get("/v1/api/businesses/<businessId>/reviews",
-                                   data=json.dumps(dict(businessId="2")), content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        response = self.client.get("/v1/api/businesses/1/reviews",
+                                   data=json.dumps(dict(owner="tonymputhia@email.com", businessId=1)),
+                                   content_type="application/json")
 
         self.assertEqual(response.status_code, 200)
