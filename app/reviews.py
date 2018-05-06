@@ -1,15 +1,28 @@
-from app.data import Data
+from app.business import Business
 
 
-class Reviews():
+class Reviews(Business):
 
     def __init__(self):
 
         """
             Business object initializer.
         """
+        super().__init__()
 
-        self.review_dict = {}
+        self.reviews_data = []
+
+    def get_all_reviews_by_business(self, businessId):
+
+        """
+            Views all reviews about a particular business.
+            Arguments:
+                Business ID: A unique identifier for the business.
+        """
+
+        business_reviews_list = [review for review in self.reviews_data if review['businessId'] == businessId]
+
+        return {"all_reviews": business_reviews_list}
 
     def create_review(self, owner, businessId, review_name, body):
 
@@ -20,31 +33,21 @@ class Reviews():
                 Review Name: A unique identify for the Review
                 Body: Information containing the actual review.
         """
-        review_id = len(Data.reviews_data) + 1
+        review_id = len(self.reviews_data) + 1
+        review_dict = {}
 
-        for review in Data.reviews_data:
-            if businessId == review['businessId']:
+        for business in Business.business_data:
 
-                self.review_dict['owner'] = owner
-                self.review_dict['businessId'] = businessId
-                self.review_dict['review_id'] = review_id
-                self.review_dict['review_name'] = review_name
-                self.review_dict['body'] = body
+            if business['businessId'] == businessId:
 
-                Data.reviews_data.append(self.review_dict)
+                review_dict['owner'] = owner
+                review_dict['businessId'] = businessId
+                review_dict['review_id'] = review_id
+                review_dict['review_name'] = review_name
+                review_dict['body'] = body
 
-                return {"msg": "Review added successfully.", "review_data": self.review_dict}, 201
+                self.reviews_data.append(review_dict)
+
+                return {"msg": "Review added successfully.", "review_data": review_dict}
             return {"msg": "That business does not exist."}
-
-    @staticmethod
-    def get_all_reviews(businessId):
-
-        """
-            Views all reviews about a particular business.
-            Arguments:
-                Business ID: A unique identifier for the business.
-        """
-
-        for review in Data.reviews_data:
-            if businessId == review['businessId']:
-                return {"all_reviews": Data.reviews_data}
+        return {"msg": "unsuccessful."}
