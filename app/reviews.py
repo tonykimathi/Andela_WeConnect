@@ -8,11 +8,11 @@ class Reviews(Business):
         """
             Business object initializer.
         """
-        super().__init__()
+        super(Business, self).__init__()
 
         self.reviews_data = []
 
-    def get_all_reviews_by_business(self, businessId):
+    def get_all_reviews_by_business(self, business_id):
 
         """
             Views all reviews about a particular business.
@@ -20,28 +20,29 @@ class Reviews(Business):
                 Business ID: A unique identifier for the business.
         """
 
-        business_reviews_list = [review for review in self.reviews_data if review['businessId'] == businessId]
+        business_reviews_list = [review for review in self.reviews_data if review['business_id'] == business_id]
 
-        return {"all_reviews": business_reviews_list}
+        return {"msg": "These are your reviews.", "all_reviews": business_reviews_list}
 
-    def create_review(self, owner, businessId, review_name, body):
+    def create_review(self, owner, business_id, review_name, body):
 
         """
             Creates Review objects.
             Arguments:
-                Business ID: A unique identifier for the business being reviewed.
-                Review Name: A unique identify for the Review
-                Body: Information containing the actual review.
+                owner: A unique identifier for the owner of the review.
+                business_id: A unique identifier for the business being reviewed.
+                review_name : A unique identify for the Review
+                body: Information containing the actual review.
         """
         review_id = len(self.reviews_data) + 1
         review_dict = {}
 
         for business in Business.business_data:
 
-            if business['businessId'] == businessId:
+            if business['business_id'] == business_id:
 
                 review_dict['owner'] = owner
-                review_dict['businessId'] = businessId
+                review_dict['business_id'] = business_id
                 review_dict['review_id'] = review_id
                 review_dict['review_name'] = review_name
                 review_dict['body'] = body

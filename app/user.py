@@ -18,9 +18,9 @@ class User():
         """
             Creates user objects.
             Arguments:
-                Username: A unique identifier for the user.
-                Email: Personal email of the user.
-                Password: A secret security key.
+                username: A unique identifier for the user.
+                email: Personal email of the user.
+                password: A secret security key.
         """
         user_id = len(User.user_data) + 1
 

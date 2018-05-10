@@ -52,22 +52,27 @@ class ModelsTestCase(unittest.TestCase):
         self.assertEqual(response['msg'], 'You have no account,please sign up')
 
     def test_successful_login(self):
-        response = self.user.login_user("tonymputhia@email.com", "Password1*")
+        self.user.create_user("Tony1", "tony1@email.com", "Password80*", "Password80*")
+        response = self.user.login_user("tony1@email.com", "Password80*")
         self.assertEqual(response['msg'], 'Successfully logged in!')
 
     def test_business_created_successfully(self):
         response = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", "Record Label",
                                                  "Nairobi", "Music")
-        self.assertEqual(response['msg'], 'Business created successfully.')
+        self.assertEqual(response['message'], 'Business created successfully.')
 
     def test_review_created_successfully(self):
         response = self.review.create_review("tonymputhia@email.com", 1, "First Review", "It's a nice clinic")
         self.assertEqual(response['msg'], 'Review added successfully.')
 
+    def test_get_all_reviews_by_business(self):
+        response = self.review.get_all_reviews_by_business(1)
+        self.assertEqual(response['msg'], 'These are your reviews.')
+
     def test_business_name_exists(self):
         response = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", "Record Label",
                                                  "Nairobi", "Music")
-        self.assertEqual(response['msg'], 'Business name already exists. Enter a new one.')
+        self.assertEqual(response['message'], 'Business name already exists. Enter a new one.')
 
     def test_delete_business(self):
         response = self.business.delete_business("tonymputhia@email.com", 1)
@@ -80,6 +85,10 @@ class ModelsTestCase(unittest.TestCase):
 class EndpointsTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client(self)
+
+    def test_home_route(self):
+        response = self.client.get("/", content_type="application/json")
+        self.assertEqual(response.status_code, 200)
 
     def test_successful_registration(self):
         response = self.client.post("/api/v1/auth/register",
@@ -98,6 +107,41 @@ class EndpointsTestCase(unittest.TestCase):
                                                          password="Password1*", confirm_password="Password1*")),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 403)
+
+    def test_successful_login(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        response = self.client.post("/api/v1/auth/login",
+                                    data=json.dumps(dict(email="tonymputhia@email.com",
+                                                         password="Password1*")),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+    def test_failed_login(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        response = self.client.post("/api/v1/auth/login",
+                                    data=json.dumps(dict(email="tonymputhia@email.com",
+                                                         password="Password1*1")),
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, 401)
+
+    def test_successful_logout(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        response = self.client.post("/api/v1/auth/logout", content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
 
     def test_reset_password(self):
         self.client.post("/api/v1/auth/reset-password",
@@ -119,12 +163,11 @@ class EndpointsTestCase(unittest.TestCase):
                          data=json.dumps(dict(email="tonymputhia@email.com",
                                               password="Password1*")),
                          content_type="application/json")
+        data = {"owner": "timmputhia@email.com", "business_name": "Jackso 5 Academy",
+                "description": "This is a music school established in 1876", "location": "Mississippi",
+                "category": "Music School"}
         response = self.client.post("/v1/api/businesses",
-                                    data=json.dumps(dict(owner="tonymputhia@email.com",
-                                                         business_name="St. Pius X Academy",
-                                                         description="This is a primary school established in 2015",
-                                                         location="Meru County",
-                                                         category="School")),
+                                    data=json.dumps(data),
                                     content_type="application/json")
         self.assertEqual(response.status_code, 201)
 
@@ -150,8 +193,34 @@ class EndpointsTestCase(unittest.TestCase):
                                                         description="This is a secondary school established in 2015",
                                                         location="Lodwar County",
                                                         category="School")),
-                                   content_type="application/json")
+                                   content_type="application/json",
+                                   )
         self.assertEqual(response.status_code, 200)
+
+    def test_failed_update_business_profile(self):
+        self.client.post("/api/v1/auth/register",
+                         data=json.dumps(dict(username="tony", email="tonymputhia@email.com",
+                                              password="Password1*", confirm_password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/api/v1/auth/login",
+                         data=json.dumps(dict(email="tonymputhia@email.com",
+                                              password="Password1*")),
+                         content_type="application/json")
+        self.client.post("/v1/api/businesses",
+                         data=json.dumps(dict(owner="tonymputhia@email.com",
+                                              business_name="St. Pius X Academy",
+                                              description="This is a primary school established in 2015",
+                                              location="Meru County",
+                                              category="School")),
+                         content_type="application/json")
+        response = self.client.put("/v1/api/businesses/4",
+                                   data=json.dumps(dict(owner="tonymputhia@email.com",
+                                                        business_name="Gilgil Hills Academy",
+                                                        description="This is a secondary school established in 2015",
+                                                        location="Lodwar County",
+                                                        category="School")),
+                                   content_type="application/json")
+        self.assertEqual(response.status_code, 403)
 
     def test_delete_business_profile(self):
         self.client.post("/api/v1/auth/register",

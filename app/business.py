@@ -8,7 +8,8 @@ class Business(object):
             Business object initializer.
         """
 
-    def get_all_businesses(self):
+    @staticmethod
+    def get_all_businesses():
 
         """
             Views all Business objects.
@@ -18,7 +19,8 @@ class Business(object):
 
         return {"all_businesses": Business.business_data}
 
-    def get_business_by_id(self, businessId):
+    @staticmethod
+    def get_business_by_id(business_id):
 
         """
             Views a single Business object.
@@ -27,10 +29,11 @@ class Business(object):
         """
 
         for business in Business.business_data:
-            if businessId == business['businessId']:
+            if business_id == business['business_id']:
                 return {"specific_business": business}
 
-    def get_business_by_owner(self, owner):
+    @staticmethod
+    def get_business_by_owner(owner):
 
         """
             Returns businesses belonging to a user
@@ -44,21 +47,21 @@ class Business(object):
         """
             Creates Business objects.
             Arguments:
-                User ID: A unique identifier for the user creating the business.
-                Business Name: A unique identify for the Business
-                Description: Contains descriptive information about the business.
-                Location: Shows where business is situated.
-                Category: Shows the business type that the business falls under.
+                owner: A unique identifier for the user creating the business.
+                business_name: A unique identify for the Business
+                description: Contains descriptive information about the business.
+                location: Shows where business is situated.
+                category: Shows the business type that the business falls under.
         """
-        businessId = len(Business.business_data) + 1
+        business_id = len(Business.business_data) + 1
         business_dict = {}
 
         for business in Business.business_data:
-            if business['business_name'] == business_name:
+            if business.get('business_name') == business_name:
                 return {"message": "Business name already exists. Enter a new one."}
 
         business_dict['owner'] = owner
-        business_dict['businessId'] = businessId
+        business_dict['business_id'] = business_id
         business_dict['business_name'] = business_name
         business_dict['description'] = description
         business_dict['location '] = location
@@ -68,18 +71,19 @@ class Business(object):
 
         return {"message": "Business created successfully.", "business_data": business_dict}
 
-    def update_business(self, owner, businessId, business_name, description, location, category):
+    def update_business(self, owner, business_id, business_name, description, location, category):
 
         """
             Updates Business objects.
             Arguments:
-                Business ID: A unique identifier for the business to be updated.
-                Business Name: A unique identify for the Business
-                Description: Contains descriptive information about the business.
-                Location: Shows where business is situated.
-                Category: Shows the business type that the business falls under.
+                owner: A unique identifier for the user updating the business.
+                business_id : A unique identifier for the business to be updated.
+                business_name : A unique identify for the Business
+                description: Contains descriptive information about the business.
+                location: Shows where business is situated.
+                category: Shows the business type that the business falls under.
         """
-        found_business = self.get_business_by_id(businessId)
+        found_business = self.get_business_by_id(business_id)
 
         if found_business:
 
@@ -96,14 +100,15 @@ class Business(object):
             return {"msg": "You cannot update a business you do not own."}
         return {"msg": "No such business exists."}
 
-    def delete_business(self, owner, businessId):
+    def delete_business(self, owner, business_id):
 
         """
             Deletes Business objects.
             Arguments:
-                Business ID: A unique identifier for the business to be updated.
+                owner: A unique identifier for the user updating the business.
+                business_id : A unique identifier for the business to be updated.
         """
-        found_business = self.get_business_by_id(businessId)
+        found_business = self.get_business_by_id(business_id)
 
         if found_business:
 
@@ -113,4 +118,3 @@ class Business(object):
                 return {"msg": "The business has been deleted successfully."}
             return {"msg": "You cannot delete a business you do not own."}
         return {"msg": "No such business exists."}
-

@@ -18,10 +18,10 @@ app.config.from_pyfile('config.py')
 def home_route():
     """ Home route """
     response = jsonify({'greetings': 'Greetings and welcome to weConnect API'})
-    return response
+    return response, 200
 
 
-@app.route('/api/v1/auth/register', methods=['GET', 'POST'])
+@app.route('/api/v1/auth/register', methods=['POST'])
 def signup():
     if request.method == "POST":
         username = request.json['username']
@@ -35,7 +35,6 @@ def signup():
         elif msg['msg'] == 'Account with Username already exists. Please log in.' or \
                 'Account with Email already exists. Please log in.' or 'Passwords do not match. Try again.':
             return jsonify(msg), 403
-    return jsonify({"message": "Incorrect http verb"})
 
 
 @app.route('/api/v1/auth/login', methods=['GET', 'POST'])
@@ -51,7 +50,6 @@ def login():
             return jsonify(msg), 200
         elif msg['msg'] == 'Wrong Password. Try again.' or 'You have no account,please sign up':
             return jsonify(msg), 401
-    return jsonify({"message": "Incorrect http verb"})
 
 
 @app.route('/api/v1/auth/logout', methods=['POST'])
@@ -89,6 +87,7 @@ def create_business():
             category = request.json['category']
 
             msg = business_object.create_business(owner, business_name, description, location, category)
+            print('msg', msg)
 
             if msg["message"] == "Business created successfully.":
                 return jsonify(msg), 201
