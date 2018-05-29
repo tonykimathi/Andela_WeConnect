@@ -30,6 +30,8 @@ class User():
             return {"msg": "Please input a username."}
         if password is None:
             return {"msg": "Please input a password."}
+        if confirm_password is None:
+            return {"msg": "Please confirm password."}
 
         for user in User.user_data:
             if email == user['email']:
@@ -68,6 +70,10 @@ class User():
                 Email: Personal email of the user.
                 Password: A secret security key.
         """
+        if email is None:
+            return {"msg": "Please input an email address"}
+        if password is None:
+            return {"msg": "Please input a password."}
 
         for user in User.user_data:
             if email == user['email']:
@@ -84,6 +90,12 @@ class User():
                 Email: Personal email of the user.
                 New Password: A secret security key.
         """
+        if email is None:
+            return {"msg": "Please input an email address"}
+        if new_password is None:
+            return {"msg": "Please input a new password."}
+        if confirm_new_password is None:
+            return {"msg": "Please confirm your new password."}
 
         for user in User.user_data:
             if email == user['email']:

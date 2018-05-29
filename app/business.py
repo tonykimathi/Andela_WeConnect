@@ -56,6 +56,15 @@ class Business(object):
         business_id = len(Business.business_data) + 1
         business_dict = {}
 
+        if business_name is None:
+            return {"msg": "Please input a business name"}
+        if description is None:
+            return {"msg": "Please input a description."}
+        if location is None:
+            return {"msg": "Please input a location."}
+        if category is None:
+            return {"msg": "Please confirm category."}
+
         for business in Business.business_data:
             if business.get('business_name') == business_name:
                 return {"message": "Business name already exists. Enter a new one."}
@@ -113,7 +122,8 @@ class Business(object):
         if found_business:
 
             if owner == found_business["specific_business"]['owner']:
-                del found_business["specific_business"]
+                self.business_data[:] = [d for d in self.business_data
+                                         if d['business_id'] != found_business["specific_business"]['business_id']]
 
                 return {"msg": "The business has been deleted successfully."}
             return {"msg": "You cannot delete a business you do not own."}

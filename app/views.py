@@ -67,10 +67,10 @@ def reset_password():
     """ User reset password """
     if request.method == "POST":
         email = request.json['email']
-        password = request.json['password']
-        confirm_password = request.json['confirm_password']
+        new_password = request.json['new_password']
+        confirm_new_password = request.json['confirm_new_password']
 
-        msg = user_object.reset_password(email, password, confirm_password)
+        msg = user_object.reset_password(email, new_password, confirm_new_password)
 
         return jsonify(msg), 200
     return jsonify({"message": "Incorrect http verb"})
