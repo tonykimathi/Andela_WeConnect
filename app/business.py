@@ -92,22 +92,18 @@ class Business(object):
                 location: Shows where business is situated.
                 category: Shows the business type that the business falls under.
         """
-        found_business = self.get_business_by_id(business_id)
 
-        if found_business:
+        for business in Business.business_data:
+            if business.get('business_id') == business_id:
 
-            if owner == found_business["specific_business"]['owner']:
-                found_business["specific_business"]['owner'] = owner
-                found_business["specific_business"]['business_name'] = business_name
-                found_business["specific_business"]['description'] = description
-                found_business["specific_business"]['location '] = location
-                found_business["specific_business"]['category '] = category
+                business['owner'] = owner
+                business['business_name'] = business_name
+                business['description'] = description
+                business['location '] = location
+                business['category '] = category
 
-                Business.business_data.append(found_business)
-
-                return {"msg": "Business updated successfully.", "business_data": found_business}
-            return {"msg": "You cannot update a business you do not own."}
-        return {"msg": "No such business exists."}
+                return {"msg": "Business updated successfully.", "business_data": business}
+            return {"msg": "No such business exists."}
 
     def delete_business(self, owner, business_id):
 
