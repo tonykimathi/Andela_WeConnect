@@ -102,3 +102,5 @@ class User():
                 if new_password == confirm_new_password:
                     self.user_dict['password'] = new_password
                     return {"message": "Your password has been reset"}
+                return {"msg": "Passwords don't match"}
+        return {"msg": "You have no account, please sign up"}

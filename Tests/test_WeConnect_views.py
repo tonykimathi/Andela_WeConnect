@@ -67,7 +67,7 @@ class EndpointsTestCase(unittest.TestCase):
     def test_reset_password(self):
         self.client.post("/api/v1/auth/reset-password",
                          data=json.dumps(dict(email="timmputhia45@email.com",
-                                              password="Password234*", confirm_password="Password234*")),
+                                              new_password="Password234*", confirm_new_password="Password234*")),
                          content_type="application/json")
         response = self.client.post("/api/v1/auth/reset-password",
                                     data=json.dumps(dict(email="timmputhia45@email.com",
@@ -109,7 +109,6 @@ class EndpointsTestCase(unittest.TestCase):
         response = self.client.put("/v1/api/businesses/2",
                                    data=json.dumps(data2),
                                    content_type="application/json")
-        print(response)
         self.assertEqual(response.status_code, 200)
 
     def test_failed_update_business_profile(self):

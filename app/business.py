@@ -32,16 +32,6 @@ class Business(object):
             if business_id == business['business_id']:
                 return {"specific_business": business}
 
-    @staticmethod
-    def get_business_by_owner(owner):
-
-        """
-            Returns businesses belonging to a user
-        """
-        owner_business_list = [business for business in Business.business_data if business['owner'] == owner]
-
-        return owner_business_list
-
     def create_business(self, owner, business_name, description, location, category):
 
         """

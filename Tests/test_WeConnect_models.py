@@ -23,6 +23,16 @@ class ModelsTestCase(unittest.TestCase):
         response = self.user.create_user("Tom2", "tom@email", "Password80*", "Password80*")
         self.assertEqual(response['msg'], 'Please provide a valid email address')
 
+    def test_signup_with_wrong_credentials(self):
+        response1 = self.user.create_user("Tom2", None, "Password80*", "Password80*")
+        response2 = self.user.create_user(None, "tom@email.com", "Password80*", "Password80*")
+        response3 = self.user.create_user("Tom2", "tom@email.com", None, "Password80*")
+        response4 = self.user.create_user("Tom2", "tom@email.com", "Password80*", None)
+        self.assertEqual(response1['msg'], 'Please input an email address')
+        self.assertEqual(response2['msg'], 'Please input a username.')
+        self.assertEqual(response3['msg'], 'Please input a password.')
+        self.assertEqual(response4['msg'], 'Please confirm password.')
+
     def test_signup_with_wrong_username_format(self):
         response = self.user.create_user("Tom2@", "tom@email", "Password80*", "Password80*")
         self.assertEqual(response['msg'], 'These special characters (. , ! space []) should not be in your username.')
@@ -54,10 +64,50 @@ class ModelsTestCase(unittest.TestCase):
         response = self.user.login_user("tony1@email.com", "Password80*")
         self.assertEqual(response['msg'], 'Successfully logged in!')
 
+    def test_login_with_wrong_credentials(self):
+        response1 = self.user.login_user(None, "Password80*")
+        response2 = self.user.login_user("tom@email.com", None)
+        self.assertEqual(response1['msg'], 'Please input an email address')
+        self.assertEqual(response2['msg'], 'Please input a password.')
+
+    def test_reset_password(self):
+        self.user.create_user("Tony2", "tony2@email.com", "Password80*", "Password80*")
+        self.user.login_user("tony1@email.com", "Password80*")
+        response = self.user.reset_password("tony2@email.com", "Password808*", "Password808*")
+        self.assertEqual(response['message'], "Your password has been reset")
+        response2 = self.user.reset_password("tony2@email.com", "Password808*", "Password80*")
+        self.assertEqual(response2['msg'], "Passwords don't match")
+
+    def test_failed_reset_password(self):
+        response = self.user.reset_password("tony2@email.com", "Password808*", "Password808*")
+        self.assertEqual(response['msg'], "You have no account, please sign up")
+
+    def test_reset_password_wrong_credentials(self):
+        response1 = self.user.reset_password(None, "Password80*", "Password80*")
+        response2 = self.user.reset_password("tom@email.com", None, "Password80*")
+        response3 = self.user.reset_password("tom@email.com", "Password80*", None)
+        self.assertEqual(response1['msg'], 'Please input an email address')
+        self.assertEqual(response2['msg'], 'Please input a new password.')
+        self.assertEqual(response3['msg'], 'Please confirm your new password.')
+
     def test_business_created_successfully(self):
         response = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", "Record Label",
                                                  "Nairobi", "Music")
         self.assertEqual(response['message'], 'Business created successfully.')
+
+    def test_create_business_wrong_credentials(self):
+        response1 = self.business.create_business("tonymputhia@email.com", None, "Record Label",
+                                                  "Nairobi", "Music")
+        response2 = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", None,
+                                                  "Nairobi", "Music")
+        response3 = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", "Record Label",
+                                                  None, "Music")
+        response4 = self.business.create_business("tonymputhia@email.com", "Baller Entertainment", "Record Label",
+                                                  "Meru", None)
+        self.assertEqual(response1['msg'], 'Please input a business name')
+        self.assertEqual(response2['msg'], 'Please input a description.')
+        self.assertEqual(response3['msg'], 'Please input a location.')
+        self.assertEqual(response4['msg'], 'Please confirm category.')
 
     def test_review_created_successfully(self):
         self.business.create_business("tonymputhia@email.com", "Most Entertainment", "Record Label",
@@ -79,6 +129,14 @@ class ModelsTestCase(unittest.TestCase):
                                       "Nairobi", "Music")
         response = self.business.delete_business("tonymputhia@email.com", 2)
         self.assertEqual(response['msg'], 'The business has been deleted successfully.')
+
+    def test_failed_delete_business(self):
+        self.business.create_business("tonymputhia@email.com", "Y-Not Entertainment", "Record Label",
+                                      "Nairobi", "Music")
+        response = self.business.delete_business("tonymputhia26@email.com", 2)
+        self.assertEqual(response['msg'], 'You cannot delete a business you do not own.')
+        response2 = self.business.delete_business("tonymputhia@email.com", 3)
+        self.assertEqual(response2['msg'], 'No such business exists.')
 
     def tearDown(self):
         del self.user

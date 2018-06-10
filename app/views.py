@@ -10,6 +10,7 @@ business_object = Business()
 review_object = Reviews()
 
 app = FlaskAPI(__name__, instance_relative_config=True)
+app.secret_key = 'youwouldneverguessthis'
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
@@ -41,10 +42,9 @@ def signup():
 def login():
     """ User login """
     if request.method == "POST":
-        email = request.json['email']
         password = request.json['password']
-        session['email'] = email
-        msg = user_object.login_user(email, password)
+        session['email'] = request.json['email']
+        msg = user_object.login_user(session['email'], password)
 
         if msg['msg'] == 'Successfully logged in!':
             return jsonify(msg), 200
@@ -56,10 +56,9 @@ def login():
 def logout():
     """ User logout """
     if request.method == "POST":
-        if session.get('email') is not None:
+        if 'email' in session:
             session.pop('email', None)
             return jsonify({"message": "Logout successful"}), 200
-    return jsonify({"message": "You are not logged in"}), 401
 
 
 @app.route('/api/v1/auth/reset-password', methods=['POST'])
@@ -73,12 +72,11 @@ def reset_password():
         msg = user_object.reset_password(email, new_password, confirm_new_password)
 
         return jsonify(msg), 200
-    return jsonify({"message": "Incorrect http verb"})
 
 
 @app.route('/v1/api/businesses', methods=['POST'])
 def create_business():
-    if session.get('email') is not None:
+    if 'email' in session:
         if request.method == "POST":
             owner = session['email']
             business_name = request.json['business_name']
@@ -87,13 +85,10 @@ def create_business():
             category = request.json['category']
 
             msg = business_object.create_business(owner, business_name, description, location, category)
-            print('msg', msg)
 
             if msg["message"] == "Business created successfully.":
                 return jsonify(msg), 201
             return jsonify(msg), 403
-        return jsonify({"message": "Incorrect http verb"})
-    return jsonify({"message": "You have to log in first!"})
 
 
 @app.route('/v1/api/businesses/<int:businessId>', methods=['PUT'])
@@ -112,8 +107,6 @@ def update_business_profile(businessId):
                 return jsonify(msg), 200
             return jsonify(msg), 403
 
-    return jsonify({"message": "You have to log in first!"})
-
 
 @app.route('/v1/api/businesses/<int:businessId>', methods=['DELETE'])
 def delete_business(businessId):
@@ -122,7 +115,6 @@ def delete_business(businessId):
             owner = session['email']
             msg = business_object.delete_business(owner, businessId)
             return jsonify(msg), 200
-    return jsonify({"message": "You have to log in first!"})
 
 
 @app.route('/v1/api/businesses', methods=['GET'])
@@ -131,7 +123,6 @@ def get_businesses():
         if request.method == "GET":
             msg = business_object.get_all_businesses()
             return jsonify(msg), 200
-    return jsonify({"message": "You have to log in first!"})
 
 
 @app.route('/v1/api/businesses/<int:businessId>', methods=['GET'])
@@ -140,7 +131,6 @@ def get_business_by_id(businessId):
         if request.method == "GET":
             msg = business_object.get_business_by_id(businessId)
             return jsonify(msg), 200
-    return jsonify({"message": "You have to log in first!"})
 
 
 @app.route('/v1/api/businesses/<int:businessId>/reviews', methods=['POST'])
@@ -152,7 +142,6 @@ def add_review(businessId):
             body = request.json['body']
             msg = review_object.create_review(owner, businessId, review_name, body)
             return jsonify(msg), 201
-    return jsonify({"message": "You have to log in first!"})
 
 
 @app.route('/v1/api/businesses/<int:businessId>/reviews', methods=['GET'])
@@ -161,4 +150,3 @@ def get_all_reviews(businessId):
         if request.method == "GET":
             msg = review_object.get_all_reviews_by_business(businessId)
             return jsonify(msg), 200
-    return jsonify({"message": "You have to log in first!"})
