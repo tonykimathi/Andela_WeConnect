@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/tonykimathi/Andela_WeConnect.svg?branch=ft-user-registration-login-155701739)](https://travis-ci.org/tonykimathi/Andela_WeConnect)
-[![Coverage Status](https://coveralls.io/repos/github/tonykimathi/Andela_WeConnect/badge.svg?branch=ft-reviews-155603453)](https://coveralls.io/github/tonykimathi/Andela_WeConnect?branch=ft-reviews-155603453)
+[![Coverage Status](https://coveralls.io/repos/github/tonykimathi/Andela_WeConnect/badge.svg?branch=Develop)](https://coveralls.io/github/tonykimathi/Andela_WeConnect?branch=Develop)
 # WeConnect
 
 WeConnect provides a platform that brings businesses and individuals together. 
@@ -10,23 +10,23 @@ to write reviews about the businesses they have interacted with.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-##### Clone this repository
+1. ##### Clone this repository
 
 > https://github.com/tonykimathi/Andela_WeConnect.git
 
-1. ##### Create a virtual environment
+2. ##### Create a virtual environment
 
    ​	Use this [**guide**](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/).
 
    ​	Activate the  virtual environment.
 
-2. ##### Install project dependencies
+3. ##### Install project dependencies
 
      run the command `pip -r install requirements.txt` on the command line
      
 ### Usage
 
-To test our project on your terminal run 
+To run this project on your terminal, run:
 
 ``` export FLASK_APP=run.py```
 
@@ -35,6 +35,17 @@ then
 ``` flask run ```
 
 on your browser open up [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+### Testing
+
+The tests on this project run using ```nosetests```. Run:
+
+``` nosetests -v --with-coverage --cover-package=app ```
+
+## Built With
+
+* [Flask](http://flask.pocoo.org/) - The web framework used
+* [Nosetest](http://nose.readthedocs.io/en/latest/) - The testing framework used
 
 ### Api Endpoints
 
