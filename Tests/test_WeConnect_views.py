@@ -243,7 +243,7 @@ class EndpointsTestCase(unittest.TestCase):
                                               location="Meru County",
                                               category="School")),
                          content_type="application/json")
-        response = self.client.get("/v1/api/businesses/1/reviews",
+        response = self.client.post("/v1/api/businesses/1/reviews",
                                    data=json.dumps(dict(owner="tonymputhia@email.com", businessId=1)),
                                    content_type="application/json")
 

@@ -115,6 +115,10 @@ class ModelsTestCase(unittest.TestCase):
         response = self.review.create_review("tonymputhia@email.com", 1, "First Review", "It's a nice clinic")
         self.assertEqual(response['msg'], 'Review added successfully.')
 
+    def test_review_created_unsuccessfully(self):
+        response = self.review.create_review("tonymputhia@email.com", 3, "First Review", "It's a nice clinic")
+        self.assertEqual(response['msg'], 'That business does not exist.')
+
     def test_get_all_reviews_by_business(self):
         response = self.review.get_all_reviews_by_business(1)
         self.assertEqual(response['msg'], 'These are your reviews.')

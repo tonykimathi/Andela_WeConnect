@@ -51,4 +51,3 @@ class Reviews(Business):
 
                 return {"msg": "Review added successfully.", "review_data": review_dict}
             return {"msg": "That business does not exist."}
-        return {"msg": "unsuccessful."}
